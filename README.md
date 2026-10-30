@@ -1,4 +1,3 @@
-# Work with Muse — IpongJkBase
 
 A public log of what was built and done with Muse (agent Nfa), October 2026.
 Times are WIB (Asia/Jakarta) unless stated otherwise.
