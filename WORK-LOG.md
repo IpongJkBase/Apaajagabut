@@ -205,3 +205,108 @@ Project: 4,096 generative pixel works, BSC, free mint (gas only),
   was ready and awaiting user approval as of 2026-10-30 ~07:40 WIB;
   it had NOT been published at that check. Do not post it without fresh
   approval and refreshed market data.
+
+## Updates — 2026-10-30 night to 2026-10-31
+
+### Puppet website — evening edits (2026-10-30 ~23:15 WIB to 2026-10-31 ~00:17 WIB)
+
+- Header and mobile-menu "Open Token" buttons replaced with "Open
+  Telegram" linking to the bot (per-token card links to token pages kept).
+- Batched job (held, then go-ahead ~23:23 WIB): hero images replaced with
+  a user-supplied Frankenpickle image, and an "Open Telegram" ghost button
+  added to the hero call-to-action row.
+- Duplicate-image fix 2026-10-31 ~00:06 WIB: the batch had put the
+  Frankenpickle in both the hero art and the banner strip; the banner
+  image block was removed so only the hero image remains.
+- Orphan-caption fix ~00:17 WIB: the banner removal had left a stray
+  caption and closing tags under the hero; removed and verified gone
+  (hero intact, "Open Telegram" present in header, menu, and hero).
+- Latest single-file export at that point: ~1,216,980 bytes. The live
+  Cloudflare Pages site still lags the export until the user redeploys
+  manually — that lag is by design, not an error.
+- X bio options were drafted (a short $PUPPET bio and a product bio
+  mentioning the Web App, Token Tracker, and Telegram bot) but not
+  confirmed applied. A form answer and a bot-introduction draft for the
+  vibe/vibe team were also delivered, not confirmed sent.
+
+### Telegram bot — tracker, watchlist, wallet tracking (2026-10-30 ~23:00 WIB to 2026-10-31 ~13:47 WIB)
+
+Bot: PuppetNotifyVibevibeBot (@PuppetvibevibeBot). Paper trading only;
+no wallet, no private key, no real funds move in the bot.
+
+- Detailed tracker cards 2026-10-31 ~00:47 WIB: buys/sells 24h and 1h,
+  buyers 1h, raised/to-raise/ETA (or "Stalled") for ungraduated tokens,
+  launch date (UTC), and creator address, on all list commands, alerts,
+  /token, and /puppet. Long lists split at card boundaries.
+- Reliability: long-poll cut from 30s to 10s (the runtime cuts idle TLS
+  connections); API fetch retries raised to 8x with partial-JSON reuse
+  for truncated responses. Health check 2026-10-31 ~01:07 WIB: clean log,
+  /new 3/3 OK.
+- Watchlist, added 2026-10-31 (public feature, each chat its own list):
+  /watch 0x… (max 10 tokens per chat), /watchlist, /unwatch 0x….
+  Alert when a watched token rises ≥2 test ETH since the last 60s
+  check. Graduated tokens use 24h volume as the proxy (their curve
+  raised amount is 0 after graduation); ungraduated tokens use the
+  curve raised amount first. Separate from /alerts bigbuy, which only
+  covers new launches — which is why a $PUPPET buy never triggered a
+  big-buy alert before this feature.
+- Wallet tracking, added 2026-10-31 (public feature, each chat its own
+  list): /track 0x… (max 5 wallets per chat), /tracklist, /untrack 0x….
+  The launch-data source used by the bot has no per-wallet or
+  per-trade endpoint, so tracking uses the Robinhood Chain Testnet
+  explorer API (on-chain token transfers). Alerts include token name,
+  amount, test ETH spent, WIB time, token address, a Chart link to the
+  token page on testnet.vibevibe.fun, and an explorer tx link.
+  On /track, existing transfers are marked seen, so old trades are
+  never re-alerted.
+- Menu: 17 commands registered (start, new, topvolume, topmovers,
+  token, puppet, watch, watchlist, unwatch, track, tracklist, untrack,
+  trade, sell, portfolio, alerts, help), verified server-side. Users
+  on a stale Telegram client may still see the old 11-command menu
+  until the app is restarted; typed commands and /help work regardless.
+- BUY/SELL misclassification fix, 2026-10-31 ~13:47 WIB (user-corrected):
+  the first tracking logic judged a single incoming transfer leg plus
+  "tx sent by the wallet", so it misreported a $PIXELS sell and a
+  $PIXELS claim as buys. The sell tx had an 83,355,883-token outgoing
+  leg to the pool plus a 10,688,654-token incoming leg, and the claim
+  tx (method claimFor) paid 0 test ETH. New logic is NET per token
+  per tx: BUY only if net tokens in > 0 AND test ETH paid > 0; SELL
+  (new alert) if net tokens out > 0; claims/reflections/airdrops
+  (tokens in, 0 ETH paid) send no alert. Verified against both
+  $PIXELS txs and the earlier $PUPPET and $VIBESQUAD buys.
+  $PIXELS: `0xeD141Ed11f54757AD234c67C74725b10232EA6a8`.
+
+### Vibe/vibe official API — searched, not found (2026-10-31)
+
+- Official docs (testnet.vibevibe.fun/docs, all 22 sections searched):
+  no public API — no endpoints, base URL, auth, or rate limits. The
+  safety section is a verified-links list plus wallet-safety warnings.
+- "Playbooks Public" Drive folder (8 documents, read in full): no
+  vibe/vibe API either. The only "API" mentions are generic advice
+  ("keep API keys server-side"). Playbook_05_Build_Basics is the source
+  of the AI & Agents and AI Lab tool lists (Codex, Claude Code, Cursor,
+  Grok, Hugging Face, Gradio, Cloudflare Workers, Docker, environment
+  variables, Supabase RLS, testnet-first, transaction simulation) —
+  a general builder toolkit from the Discord #builder-tools channel,
+  not API documentation. Its only connectivity advice is chain RPC
+  (chain ID 46630) plus standard ERC-20 reads and an explorer/indexer
+  for holder lists.
+
+### Bot and website health check (2026-10-31 ~13:28 WIB)
+
+- Bot found completely dead (no process; last state ~02:34 WIB, after
+  another VM replacement ~12:29 WIB); a background restart attempt had
+  been blocked, so it was restarted manually and verified working
+  (test message delivered, watcher state updating, /new and /puppet
+  OK, tracked-wallet list intact). Lesson repeated: the bot on this VM
+  is NOT 24/7-proof — true 24/7 needs an always-on server.
+- Website puppetrobinhood.pages.dev checked at the same time: live and
+  loading normally (hero, $PUPPET card, tax, reflections/burn, FAQ all
+  present). No new defect; it still serves the 2026-10-30 version and
+  lags the newest export until the user redeploys manually.
+
+### Photo edit (2026-10-31 ~01:11 WIB)
+
+- A user photo (person asleep on a floor mat) was edited to the same
+  person/pose asleep in a luxury hotel room, photorealistic style, and
+  delivered as an image file. Variations were offered, no reply yet.

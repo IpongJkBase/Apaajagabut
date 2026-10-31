@@ -19,6 +19,9 @@ See [WORK-LOG.md](WORK-LOG.md) for the full timeline.
 - **Holorium** — NFTs **#736** and **#737** minted.
 - **Bolt Runes market** — collab stones #7070, #1611, #3162 traded (see log).
 - **Puppet website** — $PUPPET / $HOOJA site, live on Cloudflare Pages.
+- **Telegram bot** — @PuppetvibevibeBot: launch/volume/mover lists, token
+  cards with rug scan, paper trading, per-type alerts, token watchlist,
+  and wallet buy/sell tracking (see log, 2026-10-31 updates).
 - **VibeVibe Dashboard Monitor** — public static dashboard snapshot.
 - **SOLVD** — attempted live mints, not yet minted (see log for why).
 
